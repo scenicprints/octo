@@ -637,6 +637,12 @@ document.querySelectorAll('[data-goto]').forEach((el) => {
   el.onclick = () => goTo(Number(el.dataset.goto));
 });
 
+// The dots are buttons too — swiping is nice, but it should never be the only
+// way to move between pages.
+dots.forEach((d, i) => {
+  d.onclick = () => { userSwiped = true; goTo(i); };
+});
+
 $('btn-log').onclick = () => openMatchSheet(null);
 $('cal-prev').onclick = () => {
   calMonth = { y: calMonth.m === 0 ? calMonth.y - 1 : calMonth.y, m: (calMonth.m + 11) % 12 };

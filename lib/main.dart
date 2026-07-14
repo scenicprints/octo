@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -119,7 +121,16 @@ class _WebShellState extends State<WebShell> {
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    WebViewWidget(controller: _controller),
+                    WebViewWidget(
+                      controller: _controller,
+                      // Without this, Flutter's gesture arena swallows drags
+                      // before the page sees them and you can't swipe between
+                      // Calendar / Home / Kevin / Josh.
+                      gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                        Factory<EagerGestureRecognizer>(
+                            () => EagerGestureRecognizer()),
+                      },
+                    ),
                     // Long-press the very top edge for the update sheet — the
                     // only native chrome, and invisible until you want it.
                     Positioned(

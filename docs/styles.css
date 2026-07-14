@@ -260,14 +260,22 @@ button:focus-visible{ outline: 2px solid var(--ball); outline-offset: 2px; }
 }
 
 /* ───────── page dots ───────── */
+/* Tappable as well as swipeable — never strand anyone on one page. */
 .dots{
   position: fixed; left: 0; right: 0; z-index: 20;
-  bottom: calc(6px + var(--safe-bot));
-  display: flex; gap: 6px; justify-content: center;
-  pointer-events: none;
+  bottom: calc(2px + var(--safe-bot));
+  display: flex; gap: 2px; justify-content: center;
 }
-.dot{ width: 6px; height: 6px; border-radius: 50%; background: #2E382F; transition: background .2s; }
-.dot.on{ background: var(--ball); }
+.dot{
+  width: 26px; height: 22px;           /* a real finger target around a small dot */
+  display: grid; place-items: center;
+  background: none; border: none; padding: 0;
+}
+.dot::after{
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: #2E382F; transition: background .2s, transform .2s;
+}
+.dot.on::after{ background: var(--ball); transform: scale(1.25); }
 
 /* ───────── calendar ───────── */
 .calhead{ display: flex; align-items: center; justify-content: space-between; padding: 0 2px 10px; flex: none; }
