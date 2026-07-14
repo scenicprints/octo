@@ -1,11 +1,11 @@
-name: octo
-description: "A clean, full-screen Android WebView for GitHub, with the same in-app OTA updater as my other apps."
+name: foos
+description: "Foos — the Kevin vs Josh foosball league. Android shell around the shared web app."
 publish_to: 'none'
 
 # Version is the single source of truth for the app's version.
 # publish.ps1 bumps this; the in-app updater compares it to the latest
 # GitHub Release. (Mirrors the BodyComp / Pantry pipeline.)
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.9.0
@@ -16,11 +16,8 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  # The WebView itself
+  # The WebView — loads the Foos web app (GitHub Pages).
   webview_flutter: ^4.10.0
-  webview_flutter_android: ^4.3.0  # AndroidWebViewController (downloads, media, file picker)
-  url_launcher: ^6.3.0       # open mailto:/tel: + file downloads in the real browser
-  image_picker: ^1.1.2       # let GitHub upload forms (issue attachments, avatars) pick images
 
   # In-app OTA updater (same stack as BodyComp / Pantry)
   http: ^1.2.2               # GitHub Releases API
@@ -37,9 +34,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/icon/octo_icon.png"
-  adaptive_icon_background: "#0D1117"
-  adaptive_icon_foreground: "assets/icon/octo_icon_fg.png"
+  image_path: "assets/icon/foos_icon.png"
+  adaptive_icon_background: "#0B0E0C"
+  adaptive_icon_foreground: "assets/icon/foos_icon_fg.png"
   min_sdk_android: 26
 
 flutter:

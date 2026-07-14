@@ -18,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 val hasSigning = keystorePropertiesFile.exists()
 
 android {
-    namespace = "com.scenicprints.octo"
+    namespace = "com.scenicprints.foos"
     // file_picker 8.x requires compileSdk 35+; pin 36 (matches Pantry) so the
     // build doesn't depend on the Flutter SDK's default.
     compileSdk = 36
@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.scenicprints.octo"
+        applicationId = "com.scenicprints.foos"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

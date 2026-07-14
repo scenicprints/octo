@@ -13,7 +13,7 @@ import 'theme.dart';
 // ═══════════════════════════════════════════════════════════════════════
 
 const String kRepoOwner = 'scenicprints';
-const String kRepoName = 'octo';
+const String kRepoName = 'foos';
 
 class ReleaseInfo {
   final String version; // tag minus any leading "v"
@@ -164,7 +164,7 @@ class _UpdateSheetState extends State<UpdateSheet> {
     });
     try {
       OtaUpdate()
-          .execute(r.apkUrl, destinationFilename: 'octo-${r.version}.apk')
+          .execute(r.apkUrl, destinationFilename: 'foos-${r.version}.apk')
           .listen((OtaEvent event) {
         if (!mounted) {
           return;
@@ -182,7 +182,7 @@ class _UpdateSheetState extends State<UpdateSheet> {
           case OtaStatus.PERMISSION_NOT_GRANTED_ERROR:
             setState(() {
               _s = _State.error;
-              _msg = 'Allow "install unknown apps" for Octo, then retry.';
+              _msg = 'Allow "install unknown apps" for Foos, then retry.';
             });
             break;
           case OtaStatus.ALREADY_RUNNING_ERROR:

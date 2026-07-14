@@ -1,4 +1,4 @@
-package com.scenicprints.octo
+package com.scenicprints.foos
 
 import io.flutter.embedding.android.FlutterActivity
 

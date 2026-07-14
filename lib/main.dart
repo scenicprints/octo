@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'theme.dart';
 import 'updater.dart';
 
-const String kHomeUrl = 'https://github.com';
+/// The Foos web app — the real thing lives here. This Android app is just a
+/// clean, chromeless shell around it so it looks and feels native.
+/// Josh loads the same URL in Safari on his iPhone (Add to Home Screen).
+const String kAppUrl = 'https://scenicprints.github.io/foos/';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,25 +18,22 @@ void main() {
     systemNavigationBarColor: kBg,
     systemNavigationBarIconBrightness: Brightness.light,
   ));
-  runApp(const OctoApp());
+  runApp(const FoosApp());
 }
 
-class OctoApp extends StatelessWidget {
-  const OctoApp({super.key});
+class FoosApp extends StatelessWidget {
+  const FoosApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Octo',
+      title: 'Foos',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
         scaffoldBackgroundColor: kBg,
-        colorScheme: const ColorScheme.dark(
-          surface: kBg,
-          primary: kAccent,
-        ),
+        colorScheme: const ColorScheme.dark(surface: kBg, primary: kAccent),
       ),
       home: const WebShell(),
     );
@@ -51,44 +48,17 @@ class WebShell extends StatefulWidget {
 
 class _WebShellState extends State<WebShell> {
   late final WebViewController _controller;
-  bool _loading = true;
-  ReleaseInfo? _pendingUpdate; // set when the launch-time check finds a newer build
+  ReleaseInfo? _pendingUpdate;
   bool _bannerDismissed = false;
 
   @override
   void initState() {
     super.initState();
-
-    final PlatformWebViewControllerCreationParams params =
-        const PlatformWebViewControllerCreationParams();
-    final WebViewController controller =
-        WebViewController.fromPlatformCreationParams(params);
-
-    controller
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(kBg)
-      ..setNavigationDelegate(NavigationDelegate(
-        onPageStarted: (_) {
-          if (mounted) setState(() => _loading = true);
-        },
-        onPageFinished: (_) {
-          if (mounted) setState(() => _loading = false);
-        },
-        onNavigationRequest: _handleNavigation,
-      ))
-      ..loadRequest(Uri.parse(kHomeUrl));
+      ..loadRequest(Uri.parse(kAppUrl));
 
-    // Android-specific tuning: cancel file pickers gracefully; allow media.
-    if (controller.platform is AndroidWebViewController) {
-      final AndroidWebViewController android =
-          controller.platform as AndroidWebViewController;
-      android.setOnShowFileSelector(_androidFilePicker);
-      android.setMediaPlaybackRequiresUserGesture(false);
-    }
-
-    _controller = controller;
-
-    // Quiet auto-check for an update; only surfaces a banner if one exists.
     _checkForUpdate();
   }
 
@@ -101,79 +71,18 @@ class _WebShellState extends State<WebShell> {
         setState(() => _pendingUpdate = r);
       }
     } catch (_) {
-      // Offline / rate-limited — silently ignore; user can long-press to check.
-    }
-  }
-
-  // Keep GitHub (and its asset/CDN hosts + OAuth providers) inside the WebView;
-  // push mailto:/tel:/downloads out to the system so they behave correctly.
-  Future<NavigationDecision> _handleNavigation(NavigationRequest req) async {
-    final Uri uri = Uri.parse(req.url);
-    final String scheme = uri.scheme.toLowerCase();
-
-    if (scheme == 'mailto' || scheme == 'tel' || scheme == 'intent') {
-      await _openExternally(uri);
-      return NavigationDecision.prevent;
-    }
-
-    // Direct downloads of release assets / archives → real browser.
-    final String path = uri.path.toLowerCase();
-    const List<String> downloadExt = <String>[
-      '.apk', '.zip', '.tar.gz', '.tgz', '.gz', '.exe', '.dmg', '.deb',
-      '.msi', '.jar', '.pdf', '.patch', '.diff'
-    ];
-    final bool looksLikeDownload = downloadExt.any(path.endsWith) ||
-        path.contains('/releases/download/') ||
-        uri.host.endsWith('objects.githubusercontent.com');
-    if (looksLikeDownload) {
-      await _openExternally(uri);
-      return NavigationDecision.prevent;
-    }
-
-    return NavigationDecision.navigate;
-  }
-
-  Future<void> _openExternally(Uri uri) async {
-    try {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not open that link.')),
-        );
-      }
-    }
-  }
-
-  // GitHub upload forms (issue/PR attachments, avatar) trigger a file chooser.
-  // Open the system photo picker and hand the chosen image URIs back to the
-  // WebView — images/screenshots are the overwhelming GitHub-mobile upload
-  // case. Returning an empty list = the user cancelled.
-  final ImagePicker _picker = ImagePicker();
-
-  Future<List<String>> _androidFilePicker(FileSelectorParams params) async {
-    final bool multiple = params.mode == FileSelectorMode.openMultiple;
-    try {
-      if (multiple) {
-        final List<XFile> files = await _picker.pickMultiImage();
-        return files.map((XFile f) => Uri.file(f.path).toString()).toList();
-      }
-      final XFile? file = await _picker.pickImage(source: ImageSource.gallery);
-      if (file == null) {
-        return <String>[]; // cancelled
-      }
-      return <String>[Uri.file(file.path).toString()];
-    } catch (_) {
-      return <String>[];
+      // Offline — never bother the user about it.
     }
   }
 
   Future<bool> _onBack() async {
+    // The web app pushes a history entry when a sheet opens, so Back closes
+    // the sheet first and only exits once we're at the top of the app.
     if (await _controller.canGoBack()) {
       await _controller.goBack();
-      return false; // handled — don't exit
+      return false;
     }
-    return true; // at the root — allow the pop
+    return true;
   }
 
   void _openUpdateSheet() {
@@ -210,35 +119,19 @@ class _WebShellState extends State<WebShell> {
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    RefreshIndicator(
-                      color: kAccent,
-                      backgroundColor: kCard,
-                      onRefresh: () => _controller.reload(),
-                      child: WebViewWidget(controller: _controller),
-                    ),
-                    // Long-press the very top edge to reach updates even when
-                    // no banner is showing — the only hidden chrome.
+                    WebViewWidget(controller: _controller),
+                    // Long-press the very top edge for the update sheet — the
+                    // only native chrome, and invisible until you want it.
                     Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: 24,
+                      height: 20,
                       child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onLongPress: _openUpdateSheet,
                       ),
                     ),
-                    if (_loading)
-                      const Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: LinearProgressIndicator(
-                          minHeight: 2,
-                          backgroundColor: Colors.transparent,
-                          valueColor: AlwaysStoppedAnimation<Color>(kAccent),
-                        ),
-                      ),
                   ],
                 ),
               ),

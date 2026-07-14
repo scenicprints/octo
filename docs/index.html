@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <title>Foos</title>
+  <meta name="description" content="Kevin vs Josh. 10 goals a match, 8 to take a series, 5 for the trophy.">
+
+  <!-- Runs full-screen with no browser bars when Josh adds it to his iPhone home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Foos">
+  <meta name="theme-color" content="#0B0E0C">
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ═══════════ PAGES: Calendar ← Home → Kevin → Josh ═══════════ -->
+  <div class="pager" id="pager">
+
+    <!-- ───── CALENDAR ───── -->
+    <section class="page" id="page-cal">
+      <div class="appbar">
+        <div class="applogo">Foos</div>
+        <div class="pill">Calendar</div>
+      </div>
+      <div class="body">
+        <div class="calhead">
+          <button class="navb" id="cal-prev" aria-label="Previous month">&lsaquo;</button>
+          <div class="month" id="cal-month">—</div>
+          <button class="navb" id="cal-next" aria-label="Next month">&rsaquo;</button>
+        </div>
+
+        <div class="monthtally" id="cal-tally"></div>
+
+        <div>
+          <div class="dow">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="grid" id="cal-grid"></div>
+          <div class="callegend">
+            <span><i class="swatch" style="background:var(--red)"></i>Kevin</span>
+            <span><i class="swatch" style="background:var(--blue)"></i>Josh</span>
+            <span><b>?</b> No score</span>
+          </div>
+        </div>
+
+        <div class="footer"></div>
+      </div>
+    </section>
+
+    <!-- ───── HOME (landing) ───── -->
+    <section class="page" id="page-home">
+      <div class="appbar">
+        <div class="applogo">Foos</div>
+        <div class="pill" id="home-pill">—</div>
+      </div>
+      <div class="body">
+
+        <div class="panel">
+          <div class="label"><span>The Trophy</span><span>First to 5 series</span></div>
+          <div class="trophyrow">
+            <div class="who kevin">Kevin</div>
+            <div class="slots" id="cups-kevin"></div>
+            <div class="tally" id="tally-kevin">—</div>
+          </div>
+          <div class="trophyrow">
+            <div class="who josh">Josh</div>
+            <div class="slots" id="cups-josh"></div>
+            <div class="tally" id="tally-josh">—</div>
+          </div>
+          <div id="champ"></div>
+        </div>
+
+        <div class="series">
+          <div class="label">
+            <span id="series-no">Series</span>
+            <span>First to 8</span>
+          </div>
+          <div class="flip">
+            <div class="digit kevin" id="cur-kevin">0</div>
+            <div class="vs">—</div>
+            <div class="digit josh" id="cur-josh">0</div>
+          </div>
+          <div class="track" id="track"></div>
+          <div class="goalline">
+            <span id="played">—</span>
+            <span id="tocome">—</span>
+          </div>
+        </div>
+
+        <div class="cards">
+          <button class="pcard kevin" data-goto="2">
+            <span id="man-kevin"></span>
+            <span class="pname">Kevin</span>
+            <span class="prec" id="rec-kevin">—</span>
+            <span class="psub" id="streak-kevin">—</span>
+          </button>
+          <button class="pcard josh" data-goto="3">
+            <span id="man-josh"></span>
+            <span class="pname">Josh</span>
+            <span class="prec" id="rec-josh">—</span>
+            <span class="psub" id="streak-josh">—</span>
+          </button>
+        </div>
+
+        <div class="footer">
+          <button class="cta" id="btn-log">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="#2A1D0C" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v4h4v2h-4v4h-2v-4H7v-2h4V7h2Z"/>
+            </svg>
+            Log a Match
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── KEVIN ───── -->
+    <section class="page" id="page-kevin">
+      <div class="statshead kevin">
+        <span id="bigman-kevin"></span>
+        <div>
+          <div class="nm">Kevin</div>
+          <div class="rec" id="head-kevin">—</div>
+        </div>
+      </div>
+      <div class="body" id="stats-kevin"></div>
+    </section>
+
+    <!-- ───── JOSH ───── -->
+    <section class="page" id="page-josh">
+      <div class="statshead josh">
+        <span id="bigman-josh"></span>
+        <div>
+          <div class="nm">Josh</div>
+          <div class="rec" id="head-josh">—</div>
+        </div>
+      </div>
+      <div class="body" id="stats-josh"></div>
+    </section>
+
+  </div>
+
+  <div class="dots" id="dots">
+    <span class="dot"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span>
+  </div>
+
+  <!-- sheets get injected here -->
+  <div id="sheet-root"></div>
+
+  <div id="boot"><div class="wm">Foos</div></div>
+  <div id="err" class="hidden"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

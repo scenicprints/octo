@@ -1,0 +1,16 @@
+{
+  "name": "Foos",
+  "short_name": "Foos",
+  "description": "Kevin vs Josh. 10 goals a match, 8 to take a series, 5 for the trophy.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B0E0C",
+  "theme_color": "#0B0E0C",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

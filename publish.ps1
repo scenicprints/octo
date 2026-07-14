@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════
-#  Octo — publish a new release
+#  Foos — publish a new release
 #
 #  Usage:
 #     .\publish.ps1                       (prompts for version + notes)
@@ -68,5 +68,5 @@ git push origin "v$Version"
 
 Write-Host ""
 Write-Host "Pushed tag v$Version. GitHub Actions is now building the APK." -ForegroundColor Green
-Write-Host "Watch progress:  https://github.com/scenicprints/octo/actions" -ForegroundColor Cyan
-Write-Host "When it finishes, open Octo -> long-press the top edge -> Check." -ForegroundColor Cyan
+Write-Host "Watch progress:  https://github.com/scenicprints/foos/actions" -ForegroundColor Cyan
+Write-Host "When it finishes, open Foos -> long-press the top edge -> Check." -ForegroundColor Cyan

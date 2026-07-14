@@ -53,7 +53,7 @@ jobs:
       - name: Rename APK to versioned name
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          cp build/app/outputs/flutter-apk/app-release.apk "octo-${VERSION}.apk"
+          cp build/app/outputs/flutter-apk/app-release.apk "foos-${VERSION}.apk"
 
       - name: Extract release notes from tag message
         run: git tag -l --format='%(contents)' "$GITHUB_REF_NAME" > RELEASE_NOTES.txt
@@ -63,4 +63,4 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           body_path: RELEASE_NOTES.txt
-          files: octo-*.apk
+          files: foos-*.apk

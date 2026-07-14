@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Load GitHub and download the update APK -->
+    <!-- Load the Foos web app and download the update APK -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Launch the system installer for the downloaded APK -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <application
-        android:label="Octo"
+        android:label="Foos"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -56,15 +56,6 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
-        </intent>
-        <!-- Let url_launcher hand mailto:/tel:/downloads to a browser or mail app -->
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.SENDTO" />
-            <data android:scheme="mailto" />
         </intent>
     </queries>
 </manifest>

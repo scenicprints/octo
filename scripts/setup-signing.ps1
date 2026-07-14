@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════
-#  Octo — one-time signing setup (FRESH keystore, dedicated to Octo)
+#  Foos — one-time signing setup (FRESH keystore, dedicated to Foos)
 #
 #  Run this ONCE from the project root:  .\scripts\setup-signing.ps1
 #
@@ -10,7 +10,7 @@
 #       Secrets and variables → Actions, so CI builds are signed too.
 #
 #  ⚠ BACK UP the .jks file AND the passwords somewhere safe (password
-#    manager). This key is IRREPLACEABLE — every future Octo update must be
+#    manager). This key is IRREPLACEABLE — every future Foos update must be
 #    signed with it or your phone will refuse to install over the old app.
 #    (.jks and key.properties are gitignored — they never leave your machine
 #     except as the encrypted CI secret.)
@@ -34,7 +34,7 @@ if (Test-Path $jks) {
     exit 1
 }
 
-$alias = "octo"
+$alias = "foos"
 $storePass = Read-Host "Choose a keystore (store) password" -AsSecureString
 $storePassPlain = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
     [Runtime.InteropServices.Marshal]::SecureStringToBSTR($storePass))
@@ -45,7 +45,7 @@ $storePassPlain = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
     -alias $alias `
     -keyalg RSA -keysize 2048 -validity 10000 `
     -storepass $storePassPlain -keypass $storePassPlain `
-    -dname "CN=Octo, OU=scenicprints, O=scenicprints, C=US"
+    -dname "CN=Foos, OU=scenicprints, O=scenicprints, C=US"
 
 # --- local key.properties (gitignored) ---
 @"
@@ -62,7 +62,7 @@ $b64 | Set-Content -Path "scripts\keystore.base64.txt" -Encoding ascii
 
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host " Add these 4 secrets to the GitHub repo (scenicprints/octo):" -ForegroundColor Cyan
+Write-Host " Add these 4 secrets to the GitHub repo (scenicprints/foos):" -ForegroundColor Cyan
 Write-Host "   Settings → Secrets and variables → Actions → New secret" -ForegroundColor Cyan
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host "  KEY_ALIAS        = $alias"

@@ -3,7 +3,7 @@
 // whether the "Update available" banner appears.
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:octo/updater.dart';
+import 'package:foos/updater.dart';
 
 void main() {
   group('Updater.isNewer', () {
