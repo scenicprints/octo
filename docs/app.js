@@ -228,6 +228,13 @@ function showError(msg) {
   e.classList.remove('hidden');
 }
 
+function dismissBoot() {
+  const b = $('boot');
+  if (!b) return;
+  b.classList.add('gone');
+  setTimeout(() => b.remove(), 400);
+}
+
 function buzz(ms = 12) {
   if (navigator.vibrate) navigator.vibrate(ms);
 }
@@ -640,13 +647,30 @@ $('cal-next').onclick = () => {
   renderCal();
 };
 
-// Home is the landing page, not the calendar. Jump there before first paint.
+// Home is the landing page — never the calendar. Setting scrollLeft can be a
+// no-op if the flex pages haven't been laid out yet, so keep nudging until it
+// actually takes (or until the user swipes somewhere themselves).
+let landed = false;
+let userSwiped = false;
+pager.addEventListener('pointerdown', () => { userSwiped = true; }, { passive: true });
+
 function landOnHome() {
-  goTo(1, false);
+  if (landed || userSwiped) return;
+  const w = pager.clientWidth;
+  if (!w) return;
+  pager.scrollLeft = w;
+  if (Math.abs(pager.scrollLeft - w) < 2) landed = true;
 }
+
+function landOnHomeUntilItSticks() {
+  landOnHome();
+  [0, 30, 100, 250, 600].forEach((t) => setTimeout(landOnHome, t));
+}
+window.addEventListener('load', landOnHomeUntilItSticks);
+
 window.addEventListener('resize', () => {
   const i = [...dots].findIndex((d) => d.classList.contains('on'));
-  goTo(i < 0 ? 1 : i, false);
+  pager.scrollLeft = (i < 0 ? 1 : i) * pager.clientWidth;
 });
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -662,12 +686,10 @@ function renderAll() {
 
   if (!ready) {
     ready = true;
-    landOnHome();
-    requestAnimationFrame(() => {
-      landOnHome();
-      $('boot').classList.add('gone');
-      setTimeout(() => $('boot').remove(), 400);
-    });
+    landOnHomeUntilItSticks();
+    // Don't hang this on requestAnimationFrame — it never fires in a
+    // background tab, and the splash would sit there forever.
+    dismissBoot();
   }
 }
 
@@ -706,11 +728,11 @@ onAuthStateChanged(auth, async (user) => {
     listen();
   } catch (e) {
     showError(`Could not load the league: ${e.message}`);
-    $('boot').classList.add('gone');
+    dismissBoot();
   }
 });
 
 signInAnonymously(auth).catch((e) => {
   showError(`Could not sign in: ${e.message}`);
-  $('boot').classList.add('gone');
+  dismissBoot();
 });
