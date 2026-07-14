@@ -19,7 +19,9 @@ val hasSigning = keystorePropertiesFile.exists()
 
 android {
     namespace = "com.scenicprints.octo"
-    compileSdk = flutter.compileSdkVersion
+    // file_picker 8.x requires compileSdk 35+; pin 36 (matches Pantry) so the
+    // build doesn't depend on the Flutter SDK's default.
+    compileSdk = 36
     // No native code in this app (pure WebView + Dart plugins), so we don't
     // pin an NDK — declaring one forces an NDK install that isn't needed.
 
