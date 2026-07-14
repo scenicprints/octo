@@ -20,7 +20,7 @@ dependencies:
   webview_flutter: ^4.10.0
   webview_flutter_android: ^4.3.0  # AndroidWebViewController (downloads, media, file picker)
   url_launcher: ^6.3.0       # open mailto:/tel: + file downloads in the real browser
-  file_picker: ^11.0.2        # let GitHub upload forms (issue attachments, avatars) pick files
+  image_picker: ^1.1.2       # let GitHub upload forms (issue attachments, avatars) pick images
 
   # In-app OTA updater (same stack as BodyComp / Pantry)
   http: ^1.2.2               # GitHub Releases API

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'theme.dart';
 import 'updater.dart';
@@ -145,30 +145,24 @@ class _WebShellState extends State<WebShell> {
     }
   }
 
-  // GitHub upload forms (issue/PR attachments, avatar, gist files) trigger a
-  // file chooser. Open the system picker and hand the selected file URIs back
-  // to the WebView. Returning an empty list = the user cancelled.
+  // GitHub upload forms (issue/PR attachments, avatar) trigger a file chooser.
+  // Open the system photo picker and hand the chosen image URIs back to the
+  // WebView — images/screenshots are the overwhelming GitHub-mobile upload
+  // case. Returning an empty list = the user cancelled.
+  final ImagePicker _picker = ImagePicker();
+
   Future<List<String>> _androidFilePicker(FileSelectorParams params) async {
-    final bool multiple =
-        params.mode == FileSelectorMode.openMultiple;
-
-    // If the form only accepts images, filter the picker to images; otherwise
-    // allow any file (GitHub issues accept logs, zips, PDFs, etc.).
-    final bool imagesOnly = params.acceptTypes.isNotEmpty &&
-        params.acceptTypes.every((String t) => t.startsWith('image/'));
-
+    final bool multiple = params.mode == FileSelectorMode.openMultiple;
     try {
-      final FilePickerResult? result = await FilePicker.pickFiles(
-        allowMultiple: multiple,
-        type: imagesOnly ? FileType.image : FileType.any,
-      );
-      if (result == null) {
+      if (multiple) {
+        final List<XFile> files = await _picker.pickMultiImage();
+        return files.map((XFile f) => Uri.file(f.path).toString()).toList();
+      }
+      final XFile? file = await _picker.pickImage(source: ImageSource.gallery);
+      if (file == null) {
         return <String>[]; // cancelled
       }
-      return result.files
-          .where((PlatformFile f) => f.path != null)
-          .map((PlatformFile f) => Uri.file(f.path!).toString())
-          .toList();
+      return <String>[Uri.file(file.path).toString()];
     } catch (_) {
       return <String>[];
     }
