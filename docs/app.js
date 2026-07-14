@@ -624,8 +624,11 @@ function openDay(iso) {
 const pager = $('pager');
 const dots = $('dots').querySelectorAll('.dot');
 
-function goTo(i, smooth = true) {
-  pager.scrollTo({ left: i * pager.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
+// Assign scrollLeft directly. scrollTo({behavior:'smooth'}) is silently
+// cancelled by `scroll-snap-type: x mandatory`, which made every tap-to-navigate
+// (the dots, and the Kevin/Josh cards on Home) do nothing at all.
+function goTo(i) {
+  pager.scrollLeft = i * pager.clientWidth;
 }
 
 pager.addEventListener('scroll', () => {
