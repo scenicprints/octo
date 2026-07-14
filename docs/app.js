@@ -628,16 +628,7 @@ const dots = $('dots').querySelectorAll('.dot');
 // cancelled by `scroll-snap-type: x mandatory`, which made every tap-to-navigate
 // (the dots, and the Kevin/Josh cards on Home) do nothing at all.
 function goTo(i) {
-  const target = i * pager.clientWidth;
-  pager.scrollLeft = target;
-  window.__foos = {
-    i,
-    target,
-    clientWidth: pager.clientWidth,
-    after: pager.scrollLeft,
-    sameNode: pager === document.getElementById('pager'),
-    isConnected: pager.isConnected,
-  };
+  pager.scrollLeft = i * pager.clientWidth;
 }
 
 pager.addEventListener('scroll', () => {
