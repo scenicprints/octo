@@ -624,8 +624,8 @@ function openDay(iso) {
 }
 
 // ── The game camera ───────────────────────────────────────────────────
-// Tap the camera button to jump to the Pi recorder (live view, record,
-// replays). Hold it to change the Pi's address.
+// Tap the Camera tile on the Extras page to jump to the Pi recorder (live
+// view, record, replays). Hold it to change the Pi's address.
 
 function openCamSettings() {
   const sheet = openSheet(`
@@ -663,8 +663,16 @@ function openCamSettings() {
   };
 }
 
+// The chevron under "Log a Match" slides down to Extras for anyone who
+// doesn't discover the swipe. Direct assignment — smooth scrollTo is
+// silently cancelled by scroll-snap (same story as the pager).
+$('btn-extras').onclick = () => {
+  const stack = $('homestack');
+  stack.scrollTop = stack.clientHeight;
+};
+
 {
-  const camBtn = $('btn-cam');
+  const camBtn = $('app-camera');
   let holdTimer = null;
   let held = false;
   camBtn.addEventListener('pointerdown', () => {

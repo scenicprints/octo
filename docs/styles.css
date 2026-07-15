@@ -519,14 +519,54 @@ button:focus-visible{ outline: 2px solid var(--ball); outline-offset: 2px; }
   *{ animation: none !important; transition: none !important; }
 }
 
-/* ── Game camera (the Pi recorder) ─────────────────────────────────── */
-.appright{ display:flex; align-items:center; gap:8px; }
-.camb{
-  height: 26px; padding: 0 10px; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--panel); color: var(--ink-dim);
-  display: grid; place-items: center;
+/* ── Extras: lives BELOW Home — swipe up to reach it ───────────────── */
+.vstack{
+  flex: 1; min-height: 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
 }
-.camb:active{ color: var(--ball); border-color: var(--ball); }
+.vstack::-webkit-scrollbar{ display: none; }
+.vpage{
+  height: 100%;
+  scroll-snap-align: start; scroll-snap-stop: always;
+  display: flex; flex-direction: column;
+}
+/* Home/Extras bodies must let a spent vertical swipe chain up to the
+   vstack, or the snap to the next panel never happens. */
+.vpage .body{ overscroll-behavior: auto; }
+.morehint{
+  background: none; border: none; padding: 2px 0 0;
+  color: var(--ink-dim); font-size: 15px; line-height: 1;
+  animation: nudge 2.4s ease-in-out infinite;
+}
+@keyframes nudge{
+  0%, 100%{ transform: translateY(0); opacity: .55; }
+  50%     { transform: translateY(3px); opacity: .95; }
+}
+
+/* A home-screen of app-style buttons */
+.apps{
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  padding-top: 6px;
+}
+.appicon{
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  background: none; border: none; padding: 0; color: var(--ink);
+}
+.appicon .ai{
+  width: 100%; aspect-ratio: 1; border-radius: 17px;
+  background: var(--panel); border: 1px solid var(--line);
+  display: grid; place-items: center; color: var(--ball);
+}
+.appicon:active .ai{ border-color: var(--ball); }
+.appicon .al{
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-dim);
+}
+
+/* ── Game camera settings sheet ────────────────────────────────────── */
 .caminput{
   width: 100%; padding: 12px 13px; border-radius: 11px;
   border: 1px solid var(--line); background: var(--panel); color: var(--ink);

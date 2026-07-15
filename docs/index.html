@@ -55,19 +55,15 @@
       </div>
     </section>
 
-    <!-- ───── HOME (landing) ───── -->
+    <!-- ───── HOME (landing) ─────
+         A vertical stack: swipe up from Home to reach Extras below it. -->
     <section class="page" id="page-home">
+      <div class="vstack" id="homestack">
+
+      <div class="vpage">
       <div class="appbar">
         <div class="applogo">Foos</div>
-        <div class="appright">
-          <!-- tap: watch the table · hold: change the camera's address -->
-          <button class="camb" id="btn-cam" aria-label="Game camera">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M15 7a2 2 0 0 1 2 2v1.6l4.2-2.8a.5.5 0 0 1 .8.4v7.6a.5.5 0 0 1-.8.4L17 13.4V15a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h11Z"/>
-            </svg>
-          </button>
-          <div class="pill" id="home-pill">—</div>
-        </div>
+        <div class="pill" id="home-pill">—</div>
       </div>
       <div class="body">
 
@@ -125,7 +121,36 @@
             </svg>
             Log a Match
           </button>
+          <button class="morehint" id="btn-extras" aria-label="Extras">⌄</button>
         </div>
+      </div>
+      </div>
+
+      <!-- ───── EXTRAS (below Home) ─────
+           A home-screen of app-style buttons for everything beyond the
+           league itself. First tenant: the game camera. More tiles land
+           here as they're built. -->
+      <div class="vpage" id="page-extras">
+        <div class="appbar">
+          <div class="applogo">Foos</div>
+          <div class="pill">Extras</div>
+        </div>
+        <div class="body">
+          <div class="apps">
+            <!-- tap: watch the table · hold: change the camera's address -->
+            <button class="appicon" id="app-camera">
+              <span class="ai">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M15 7a2 2 0 0 1 2 2v1.6l4.2-2.8a.5.5 0 0 1 .8.4v7.6a.5.5 0 0 1-.8.4L17 13.4V15a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h11Z"/>
+                </svg>
+              </span>
+              <span class="al">Camera</span>
+            </button>
+          </div>
+          <div class="footer"></div>
+        </div>
+      </div>
+
       </div>
     </section>
 
