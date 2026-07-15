@@ -688,6 +688,11 @@ $('btn-extras').onclick = () => {
   camBtn.onclick = () => { if (!held) window.location.href = piUrl; };
 }
 
+// The Stats tile opens the Pi's analyzer page (game stats + highlights).
+// Like Camera, it *navigates* to the Pi rather than fetching it — an https
+// page can't read the http Pi (mixed content), so the Pi serves the views.
+$('app-stats').onclick = () => { window.location.href = `${piUrl}/stats.html`; };
+
 // ═══════════════════════════════════════════════════════════════════════
 //  PAGER
 // ═══════════════════════════════════════════════════════════════════════

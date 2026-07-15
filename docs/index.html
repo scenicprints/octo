@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" href="icon-180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <!-- ?v= is bumped on every deploy so phones never run a stale cached copy -->
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
 
@@ -146,6 +146,15 @@
               </span>
               <span class="al">Camera</span>
             </button>
+            <!-- tap: game stats + highlights, served by the Pi (like Camera) -->
+            <button class="appicon" id="app-stats">
+              <span class="ai">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M4 20a1 1 0 0 1-1-1V5a1 1 0 1 1 2 0v13h14a1 1 0 1 1 0 2H4Zm4-3a1 1 0 0 1-1-1v-4a1 1 0 1 1 2 0v4a1 1 0 0 1-1 1Zm4 0a1 1 0 0 1-1-1V8a1 1 0 1 1 2 0v8a1 1 0 0 1-1 1Zm4 0a1 1 0 0 1-1-1v-6a1 1 0 1 1 2 0v6a1 1 0 0 1-1 1Z"/>
+                </svg>
+              </span>
+              <span class="al">Stats</span>
+            </button>
           </div>
           <div class="footer"></div>
         </div>
@@ -193,7 +202,7 @@
   <div id="boot"><div class="wm">Foos</div></div>
   <div id="err" class="hidden"></div>
 
-  <script type="module" src="app.js?v=10"></script>
+  <script type="module" src="app.js?v=11"></script>
 
   <!-- Offline shell: lets the app open on the Pi's internet-less FoosCam
        hotspot so you can reach the Camera tile. See docs/sw.js. -->
