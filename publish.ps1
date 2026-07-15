@@ -60,11 +60,18 @@ Set-Content -Path $pubspec -Value $lines -Encoding utf8
 Write-Host "Bumped pubspec.yaml -> $newVersion" -ForegroundColor Green
 
 # --- commit, tag, push ---
+# $ErrorActionPreference doesn't catch native exe failures in PS 5.1, so
+# check each git step explicitly — a silently failed step here is how
+# v1.0.1 got tagged with a 1.0.0 pubspec (the endless-update-loop bug).
 git add -A
 git commit -m "Release v$Version"
+if ($LASTEXITCODE -ne 0) { Write-Error "git commit failed - not tagging."; exit 1 }
 git tag -a "v$Version" -m "$Notes"
+if ($LASTEXITCODE -ne 0) { Write-Error "git tag failed - not pushing."; exit 1 }
 git push origin HEAD
+if ($LASTEXITCODE -ne 0) { Write-Error "git push failed."; exit 1 }
 git push origin "v$Version"
+if ($LASTEXITCODE -ne 0) { Write-Error "tag push failed - Actions will not build."; exit 1 }
 
 Write-Host ""
 Write-Host "Pushed tag v$Version. GitHub Actions is now building the APK." -ForegroundColor Green

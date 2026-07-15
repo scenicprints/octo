@@ -47,8 +47,17 @@ jobs:
           storeFile=upload-keystore.jks
           EOF
 
+      # The tag is the truth for the version, NOT pubspec.yaml. v1.0.1 was
+      # tagged on a commit whose pubspec still said 1.0.0, so the APK
+      # identified as 1.0.0 and the in-app updater offered 1.0.1 forever.
+      # --build-name from the tag makes that impossible; the run number
+      # keeps versionCode monotonically increasing for Android.
       - name: Build release APK
-        run: flutter build apk --release
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          flutter build apk --release \
+            --build-name="$VERSION" \
+            --build-number="${GITHUB_RUN_NUMBER}"
 
       - name: Rename APK to versioned name
         run: |
